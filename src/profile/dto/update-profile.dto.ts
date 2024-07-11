@@ -4,7 +4,7 @@ import { IsEnum, IsOptional, IsString } from 'class-validator';
 export class ProfileUpdateDto {
   @IsOptional()
   @IsString()
-  name?: string;
+  username?: string;
 
   @IsOptional()
   @IsEnum(Gender)

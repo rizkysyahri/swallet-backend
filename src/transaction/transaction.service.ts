@@ -11,6 +11,14 @@ export class TransactionService {
   async createTransaction(transactionData: TransactionDto, userId: string) {
     const { walletId, categoryId, label, amount } = transactionData;
 
+    const category = await this.prisma.category.findUnique({
+      where: { id: categoryId },
+    });
+
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+
     const transaction = await this.prisma.$transaction(async (prisma) => {
       const newTransaction = await prisma.expense.create({
         data: {
@@ -48,6 +56,9 @@ export class TransactionService {
       include: {
         category: true,
       },
+      orderBy: {
+        date: 'desc'
+      }
     });
 
     return transactions.map((transaction) => {

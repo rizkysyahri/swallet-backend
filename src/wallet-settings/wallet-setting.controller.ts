@@ -67,4 +67,15 @@ export class WalletSettingController {
 
     return await this.walletSettingService.deleteWalletSettings(id, userId);
   }
+
+  @UseGuards(AuthGuard)
+  @Get('chart/:id')
+  async getWalletAndExpenseForChart(@Param('id') id: string, @Req() req) {
+    const userId = req.userId;
+
+    return await this.walletSettingService.getWalletAndExpenseForChart(
+      id,
+      userId,
+    );
+  }
 }

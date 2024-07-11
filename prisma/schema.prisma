@@ -25,7 +25,6 @@ model User {
 
 model Profile {
   id     String  @id @unique @default(cuid())
-  name   String?
   gender Gender?
   avatar String?
   userId String  @unique
@@ -41,6 +40,7 @@ enum Gender {
 model WalletSetting {
   id                String    @id @default(cuid())
   walletName        String
+  date              DateTime  @default(now())
   beginning_balance Decimal?  @db.Decimal(15, 2)
   userId            String
   expense           Expense[]
@@ -65,5 +65,5 @@ model Expense {
 
   user     User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   wallet   WalletSetting @relation(fields: [walletId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  category Category      @relation(fields: [categoryId], references: [id])
+  category Category      @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }

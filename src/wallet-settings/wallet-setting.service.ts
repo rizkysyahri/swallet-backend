@@ -52,6 +52,9 @@ export class WalletSettingService {
               },
             },
           },
+          orderBy: {
+            date: 'desc',
+          },
         },
       },
     });
@@ -127,5 +130,22 @@ export class WalletSettingService {
     return {
       message: `Wallet with ID ${id} has been deleted`,
     };
+  }
+
+  async getWalletAndExpenseForChart(userId: string, id: string) {
+    return await this.prisma.walletSetting.findUnique({
+      where: {
+        id,
+        userId,
+      },
+      include: {
+        expense: {
+          select: {
+            date: true,
+            amount: true,
+          },
+        },
+      },
+    });
   }
 }

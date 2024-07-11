@@ -8,14 +8,15 @@ export class ProfileService {
   constructor(private prisma: PrismaService) {}
 
   async updateProfile(profileUpdateData: ProfileUpdateDto, userId: string) {
-    const updateData: { name?: string; gender?: Gender; avatar?: string } = {};
+    const updateData: { username?: string; gender?: Gender; avatar?: string } =
+      {};
 
     if (
-      profileUpdateData.name !== null &&
-      profileUpdateData.name !== undefined
+      profileUpdateData.username !== null &&
+      profileUpdateData.username !== undefined
     ) {
-      if (typeof profileUpdateData.name === 'string') {
-        updateData.name = profileUpdateData.name;
+      if (typeof profileUpdateData.username === 'string') {
+        updateData.username = profileUpdateData.username;
       }
     }
     if (
@@ -35,11 +36,32 @@ export class ProfileService {
       }
     }
 
+    if (updateData.username) {
+      await this.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          username: updateData.username,
+        },
+      });
+    }
+
     const updatedProfile = await this.prisma.profile.update({
       where: {
         userId,
       },
-      data: updateData,
+      data: {
+        gender: updateData.gender,
+        avatar: updateData.avatar,
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
     });
 
     if (!updatedProfile) {
