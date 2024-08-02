@@ -21,6 +21,7 @@ model User {
   profile       Profile?
   walletSetting WalletSetting[]
   Expense       Expense[]
+  category      Category[]
 }
 
 model Profile {
@@ -52,6 +53,8 @@ model Category {
   id      String    @id @default(cuid())
   name    String    @unique
   expense Expense[]
+  userId  String
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Expense {
