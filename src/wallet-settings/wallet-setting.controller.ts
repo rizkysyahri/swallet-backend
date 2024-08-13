@@ -22,7 +22,9 @@ export class WalletSettingController {
   @Get()
   async findWalletSetting(@Req() req) {
     const userId = req.userId;
-    return await this.walletSettingService.findWalletSetting(userId);
+    const findWalletSetting =
+      await this.walletSettingService.findWalletSetting(userId);
+    return { data: findWalletSetting };
   }
 
   @UseGuards(AuthGuard)
